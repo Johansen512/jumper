@@ -1,5 +1,9 @@
 import Phaser from '../lib/phaser.js'
 
+
+// import the Carrot class here
+import Carrot from '../game/Carrot.js'
+
 export default class Game extends Phaser.Scene
 {
 
@@ -8,6 +12,32 @@ export default class Game extends Phaser.Scene
 
     /** @type {Phaser.Physics.Arcade.Sprite} */
         player
+
+    /** @type {Phaser.Types.Input.Keyboard.CursorKeys} */
+        cursors
+
+    /** @type {Phaser.Physics.Arcade.Group} */
+        carrots
+
+
+    /**
+        * @param {Phaser.GameObjects.Sprite} sprite
+        */
+            addCarrotAbove(sprite)
+        {
+        const y = sprite.y - sprite.displayHeight
+
+        /** @type {Phaser.Physics.Arcade.Sprite} */
+        const carrot = this.carrots.get(sprite.x, y, 'carrot')
+
+        this.add.existing(carrot)
+
+    // update the physics body size
+    carrot.body.setSize(carrot.width, carrot.height)
+
+        return carrot
+}
+
 
 
 
@@ -26,6 +56,10 @@ preload()
     this.load.image('platform', 'assets/Environment/ground_grass.png')
 
     this.load.image('bunny-stand', 'assets/Players/bunny1_stand.png')
+
+    this.load.image ('carrot', 'assets/Items/carrot.png')
+
+    this.cursors = this.input.keyboard.createCursorKeys()
 
     
 
@@ -68,6 +102,21 @@ this.player.body.checkCollision.right = false
 
 this.cameras.main.startFollow(this.player)
 
+this.cameras.main.startFollow(this.player)
+
+// set the horizontal dead zone to 1.5x game width
+this.cameras.main.setDeadzone(this.scale.width * 1.5)
+
+// create a carrot
+this.carrots = this.physics.add.group({
+classType:Carrot
+
+})  
+
+this.physics.add.collider (this.platforms, this.carrots)
+
+
+
 }
 update()
 {
@@ -81,6 +130,11 @@ update()
          {
         platform.y = scrollY - Phaser.Math.Between(50, 100)
         platform.body.updateFromGameObject()
+
+
+        // create a carrot above the platform being reused
+            this.addCarrotAbove(platform)
+
         }
          })
         
@@ -95,6 +149,51 @@ if (touchingDown)
 this.player.setVelocityY(-300)
 }
 
+// left and right input logic
+if (this.cursors.left.isDown && !touchingDown)
+{
+this.player.setVelocityX(-200)
 }
+else if (this.cursors.right.isDown && !touchingDown)
+{
+this.player.setVelocityX(200)
+}
+else
+{
+// stop movement if not left or right
+this.player.setVelocityX(0)
+}
+
+this.horizontalWrap(this.player)
+
+
+
+}
+//update ends 
+
+/**
+ * @param {Phaser.GameObjects.Sprite} sprite
+*/
+horizontalWrap(sprite)
+{
+const halfWidth = sprite.displayWidth * 0.5
+const gameWidth = this.scale.width
+    if (sprite.x < -halfWidth)
+    {
+    sprite.x = gameWidth + halfWidth
+    }
+    else if (sprite.x > gameWidth + halfWidth)
+    {
+    sprite.x = -halfWidth
+    }
+    }
+
+    
+
+
+
+
+
+
 
 }
