@@ -70,6 +70,9 @@ handleCollectCarrot(player, carrot)
 // hide from display
 this.carrots.killAndHide(carrot)
 
+// play jump sound
+this.sound.play('eat')
+
 // disable from physics world
 this.physics.world.disableBody(carrot.body)
 
@@ -132,7 +135,16 @@ preload()
 
     this.load.image('bunny-jump', 'assets/Players/bunny1_jump.png')
 
+    this.load.image('bunny-fall', 'assets/Players/bunny1_fall.png')
+
     this.load.image ('carrot', 'assets/Items/carrot.png')
+
+    this.load.audio('jump', 'assets/sfx/phaseJump2.ogg')
+
+    this.load.audio('eat', 'assets/sfx/testEat.wav')
+
+    this.load.audio('fall', 'assets/sfx/fall.wav')
+
 
     this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -193,7 +205,7 @@ this.physics.add.collider (this.platforms, this.carrots)
 
 // formatted this way to make it easier to read
     this.physics.add.overlap(this.player, this.carrots, this.handleCollectCarrot, undefined, this )
-
+    
     //Counter
     
     const style = { color: '#000', fontSize: 24 }
@@ -238,6 +250,10 @@ this.player.setVelocityY(-300)
 // switch to jump texture
 this.player.setTexture('bunny-jump')
 
+// play jump sound
+this.sound.play('jump')
+
+
 }
 
 const vy = this.player.body.velocity.y
@@ -267,7 +283,14 @@ this.horizontalWrap(this.player)
 
 const bottomPlatform = this.findBottomMostPlatform()
 if (this.player.y > bottomPlatform.y + 200)
+
 {
+   // play fall sound
+
+    this.player.setTexture('bunny-fall')
+
+    this.sound.play('fall')
+
     this.scene.start('game-over')
 }
 
