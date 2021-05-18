@@ -129,7 +129,9 @@ preload()
     this.load.image('background', 'assets/Background/new_layer5.png')
 
     // load the platform image
-    this.load.image('platform', 'assets/Environment/ground_grass.png')
+    this.load.image('platform', 'assets/Environment/ground_girder.png')
+
+    //this.load.image('platform', 'assets/Environment/ground_grass.png')
 
     //this.load.image('bunny-stand', 'assets/Players/bunny1_stand.png')
 
@@ -139,15 +141,17 @@ preload()
 
     this.load.image('robot-jump', 'assets/Players/robot1_jump.png')
 
-    this.load.image('bunny-fall', 'assets/Players/bunny1_fall.png')
+    this.load.image('robot-fall', 'assets/Players/robot1_fall.png')
+
+    //this.load.image('bunny-fall', 'assets/Players/bunny1_fall.png')
 
     //this.load.image ('tiktok', 'assets/Items/tiktok.png')
 
     this.load.image ('tiktok', 'assets/Items/tiktokthing.png')
 
-    this.load.audio('jump', 'assets/sfx/phaseJump2.ogg')
+    this.load.audio('jump', 'assets/sfx/robotJump1.wav')
 
-    this.load.audio('eat', 'assets/sfx/testEat.wav')
+    this.load.audio('eat', 'assets/sfx/eat2.wav')
 
     this.load.audio('fall', 'assets/sfx/fall.wav')
 
@@ -214,7 +218,7 @@ this.physics.add.collider (this.platforms, this.tiktoks)
     
     //Counter
     
-    const style = { color: '#000', fontSize: 24 }
+    const style = { color: '#fff', fontSize: 24 }
     this.tiktoksCollectedText = this.add.text(240, 10, 'Tiktoks: 0', style)
     .setScrollFactor(0)
     .setOrigin(0.5, 0)
@@ -293,14 +297,14 @@ if (this.player.y > bottomPlatform.y + 200)
 {
    // play fall sound
 
-    this.player.setTexture('bunny-fall')
+    this.player.setTexture('robot-fall')
 
     this.sound.play('fall')
 
    
 }
 
-if (this.player.y > bottomPlatform.y + 1000)
+if (this.player.y > bottomPlatform.y + 1200)
 
 {
    
