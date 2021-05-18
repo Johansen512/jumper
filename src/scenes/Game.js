@@ -1,13 +1,13 @@
 import Phaser from '../lib/phaser.js'
 
 
-// import the Carrot class here
-import Carrot from '../game/Carrot.js'
+// import the Tiktok class here
+import Tiktok from '../game/Tiktok.js'
 
 export default class Game extends Phaser.Scene
 {
 
-    carrotsCollected = 0
+    tiktoksCollected = 0
 
     /** @type {Phaser.Physics.Arcade.StaticGroup} */
         platforms
@@ -19,36 +19,36 @@ export default class Game extends Phaser.Scene
         cursors
 
     /** @type {Phaser.Physics.Arcade.Group} */
-        carrots
+    tiktoks
 
         /** @type {Phaser.GameObjects.Text} */
-        carrotsCollectedText
+        tiktoksCollectedText
 
 
 
     /**
         * @param {Phaser.GameObjects.Sprite} sprite
         */
-            addCarrotAbove(sprite)
+            addTiktokAbove(sprite)
         {
         const y = sprite.y - sprite.displayHeight
 
         /** @type {Phaser.Physics.Arcade.Sprite} */
-        const carrot = this.carrots.get(sprite.x, y, 'carrot')
+        const tiktok = this.tiktoks.get(sprite.x, y, 'tiktok')
 
         // set active and visible
-        carrot.setActive(true)
-        carrot.setVisible(true)
+        tiktok.setActive(true)
+        tiktok.setVisible(true)
 
-        this.add.existing(carrot)
+        this.add.existing(tiktok)
 
         // update the physics body size
-        carrot.body.setSize(carrot.width, carrot.height)
+        tiktok.body.setSize(tiktok.width, tiktok.height)
 
         // make sure body is enabed in the physics world
-        this.physics.world.enable(carrot)
+        this.physics.world.enable(tiktok)
 
-        return carrot
+        return tiktok
 
 
 
@@ -63,27 +63,27 @@ export default class Game extends Phaser.Scene
 
 /**
 * @param {Phaser.Physics.Arcade.Sprite} player
-* @param {Carrot} carrot
+* @param {Tiktok} tiktok
 */
-handleCollectCarrot(player, carrot)
+handleCollectTiktok(player, tiktok)
 {
 // hide from display
-this.carrots.killAndHide(carrot)
+this.tiktoks.killAndHide(tiktok)
 
 // play jump sound
 this.sound.play('eat')
 
 // disable from physics world
-this.physics.world.disableBody(carrot.body)
+this.physics.world.disableBody(tiktok.body)
 
 
 // increment by 1
-this.carrotsCollected++
+this.tiktoksCollected++
 
 
 // create new text value and set it
-const value = `Carrots: ${this.carrotsCollected}`
-this.carrotsCollectedText.text = value
+const value = `Tiktoks: ${this.tiktoksCollected}`
+this.tiktoksCollectedText.text = value
 
 
  }
@@ -120,24 +120,30 @@ super('game')
 
 init()
 {
-this.carrotsCollected = 0
+this.tiktoksCollected = 0
 }
 
 
 preload()
 {
-    this.load.image('background', 'assets/Background/bg_layer1.png')
+    this.load.image('background', 'assets/Background/new_layer5.png')
 
     // load the platform image
     this.load.image('platform', 'assets/Environment/ground_grass.png')
 
-    this.load.image('bunny-stand', 'assets/Players/bunny1_stand.png')
+    //this.load.image('bunny-stand', 'assets/Players/bunny1_stand.png')
 
-    this.load.image('bunny-jump', 'assets/Players/bunny1_jump.png')
+    //this.load.image('bunny-jump', 'assets/Players/bunny1_jump.png')
+
+    this.load.image('robot-stand', 'assets/Players/robot1_stand.png')
+
+    this.load.image('robot-jump', 'assets/Players/robot1_jump.png')
 
     this.load.image('bunny-fall', 'assets/Players/bunny1_fall.png')
 
-    this.load.image ('carrot', 'assets/Items/carrot.png')
+    //this.load.image ('tiktok', 'assets/Items/tiktok.png')
+
+    this.load.image ('tiktok', 'assets/Items/tiktokthing.png')
 
     this.load.audio('jump', 'assets/sfx/phaseJump2.ogg')
 
@@ -178,7 +184,7 @@ body.updateFromGameObject()
 }
 
 // create a bunny sprite
-this.player = this.physics.add.sprite(240, 320, 'bunny-stand')
+this.player = this.physics.add.sprite(240, 320, 'robot-stand')
 .setScale(0.5)
 
 this.physics.add.collider(this.platforms, this.player)
@@ -194,22 +200,22 @@ this.cameras.main.startFollow(this.player)
 // set the horizontal dead zone to 1.5x game width
 this.cameras.main.setDeadzone(this.scale.width * 1.5)
 
-// create a carrot
-this.carrots = this.physics.add.group({
-classType:Carrot
+// create a tiktok
+this.tiktoks = this.physics.add.group({
+classType:Tiktok
 
 })  
 
-this.physics.add.collider (this.platforms, this.carrots)
+this.physics.add.collider (this.platforms, this.tiktoks)
 
 
 // formatted this way to make it easier to read
-    this.physics.add.overlap(this.player, this.carrots, this.handleCollectCarrot, undefined, this )
+    this.physics.add.overlap(this.player, this.tiktoks, this.handleCollectTiktok, undefined, this )
     
     //Counter
     
     const style = { color: '#000', fontSize: 24 }
-    this.carrotsCollectedText = this.add.text(240, 10, 'Carrots: 0', style)
+    this.tiktoksCollectedText = this.add.text(240, 10, 'Tiktoks: 0', style)
     .setScrollFactor(0)
     .setOrigin(0.5, 0)
 
@@ -231,8 +237,8 @@ update()
         platform.body.updateFromGameObject()
 
 
-        // create a carrot above the platform being reused
-            this.addCarrotAbove(platform)
+        // create a tiktok above the platform being reused
+            this.addTiktokAbove(platform)
 
         }
          })
@@ -248,7 +254,7 @@ if (touchingDown)
 this.player.setVelocityY(-300)
 
 // switch to jump texture
-this.player.setTexture('bunny-jump')
+this.player.setTexture('robot-jump')
 
 // play jump sound
 this.sound.play('jump')
@@ -257,10 +263,10 @@ this.sound.play('jump')
 }
 
 const vy = this.player.body.velocity.y
-if (vy > 0 && this.player.texture.key !== 'bunny-stand')
+if (vy > 0 && this.player.texture.key !== 'robot-stand')
 {
 // switch back to jump when falling
-this.player.setTexture('bunny-stand')
+this.player.setTexture('robot-stand')
  }
 
 // left and right input logic
@@ -291,10 +297,16 @@ if (this.player.y > bottomPlatform.y + 200)
 
     this.sound.play('fall')
 
-    this.scene.start('game-over')
+   
 }
 
+if (this.player.y > bottomPlatform.y + 1000)
 
+{
+   
+
+    this.scene.start('game-over')
+}
 
 
 
