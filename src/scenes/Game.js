@@ -82,7 +82,7 @@ this.tiktoksCollected++
 
 
 // create new text value and set it
-const value = `Tiktoks: ${this.tiktoksCollected}`
+const value = `Clockworks: ${this.tiktoksCollected}`
 this.tiktoksCollectedText.text = value
 
 
@@ -219,7 +219,7 @@ this.physics.add.collider (this.platforms, this.tiktoks)
     //Counter
     
     const style = { color: '#fff', fontSize: 24 }
-    this.tiktoksCollectedText = this.add.text(240, 10, 'Tiktoks: 0', style)
+    this.tiktoksCollectedText = this.add.text(240, 10, 'Clockworks: 0', style)
     .setScrollFactor(0)
     .setOrigin(0.5, 0)
 
