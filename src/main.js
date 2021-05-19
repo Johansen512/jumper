@@ -7,6 +7,8 @@ export default new Phaser.Game({
     type: Phaser.AUTO,
     width: 480,
     height: 640, 
+    backgroundColor: '#827b7b',
+    autoCenter: true,
     scene: [GameStart, Game, GameOver],
     physics: {
         default: 'arcade',
